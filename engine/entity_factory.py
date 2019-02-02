@@ -4,6 +4,10 @@ from engine.comps import Body, Actor, Art
 
 
 class EntityFactory(object):
+    """
+    A helper for making entities.
+    """
+
     def __init__(self):
         self.entity = Entity()
         self.entity.body = Body(self.entity, Pos(0, 0))

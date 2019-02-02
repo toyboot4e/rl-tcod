@@ -16,12 +16,12 @@ def main():
     con = tcod.console_new(SCR_W, SCR_H)
     map = GameMap(MAP_W, MAP_H)
 
-    print('map of visibility:')
+    print('visibilities:')
     for y in range(0, map.size.h):
         for x in range(0, map.size.w):
             tile: Tile = map.tile_at(x, y)
-            yn = 0 if tile.is_block_sight else 1
-            print(yn, end='')
+            mark = 0 if tile.is_block_sight else 1
+            print(mark, end='')
         print()
 
     player = EntityFactory().actor().art('@', [255,255,255]).pos(20, 20).build()

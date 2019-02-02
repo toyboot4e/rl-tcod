@@ -6,6 +6,10 @@ from enum import Enum
 
 
 class TilePallet:
+    """
+    It holds ascii pallets of tiles.
+    """
+
     DARK_WALL = tcod.Color(0, 0, 100)
     DARK_GROUND = tcod.Color(50, 50, 150)
 

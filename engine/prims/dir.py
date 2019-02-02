@@ -1,6 +1,10 @@
 from enum import Enum
 
 class EDir(Enum):
+    """
+    Eight directions that follow numpads. G or 5 means None direction.
+    """
+
     NW = 9
     N = 8
     NE = 7

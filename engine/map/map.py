@@ -4,6 +4,10 @@ from typing import List
 
 
 class GameMap(object):
+    """
+    The model of the game maps.
+    """
+
     def __init__(self, w, h):
         self.size: Size = Size(w, h)
         self.tiles: List[Tile] = self.initialize_tiles()
