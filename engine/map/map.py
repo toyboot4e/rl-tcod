@@ -5,7 +5,7 @@ from typing import List
 
 class GameMap(object):
     """
-    The model of the game maps.
+    The model of the game maps. Unwalkable by default.
     """
 
     def __init__(self, w, h):
@@ -19,16 +19,7 @@ class GameMap(object):
         return self.tiles[self.index(x, y)]
 
     def initialize_tiles(self):
-        # anti pattern: tiles = [Tile(False, False, False)] * (self.size.w * self.size.h)
-        # it's only for value types, not referenced types.
-        tiles = [Tile(False, False, False) for _ in range (0, self.size.area())]
-
-        y = 22
-        for x in range(0,33):
-            print(x,y)
-            tile = tiles[self.index(x, y)]
-            tile.is_block = True
-            tile.is_block_sight = True
+        tiles = [Tile(True, True, True) for _ in range (0, self.size.area())]
 
         return tiles
 
