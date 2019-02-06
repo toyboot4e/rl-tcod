@@ -8,18 +8,31 @@ class Pos(object):
     def __init__(self, x: int, y: int):
         self.x, self.y = x, y
 
+    def add(self, x: int, y: int) -> 'Self':
+        return Pos(self.x + x, self.y + y)
+
     def __str__(self):
         return format('Pos({0}, {1})', self.w, self.h)
 
     def __add__(self, other):
         if isinstance(other, Pos):
-            return Size(self.x + other.x, self.y + other.y)
+            return Pos(self.x + other.x, self.y + other.y)
+        elif isinstance(other, Size):
+            return Pos(self.x + other.w, self.y + other.h)
         else:
             return NotImplemented
 
-     def __sub__(self, other) -> Size:
+    def __sub__(self, other) -> 'Self':
         if isinstance(other, Pos):
-            return Size(self.x - other.x, self.y - other.y)
+            return Pos(self.x - other.x, self.y - other.y)
+        elif isinstance(other, Size):
+            return Pos(self.x - other.w, self.y - other.h)
+        else:
+            return NotImplemented
+
+    def __mul__(self, other) -> 'Self':
+        if isinstance(other, int):
+            return Pos(self.x * other, self.y * other)
         else:
             return NotImplemented
 
@@ -37,15 +50,25 @@ class Size(object):
     def __str__(self):
         return format('Size({0}, {1})', self.w, self.h)
 
-    def __add__(self, other):
+    def __add__(self, other) -> 'Self':
         if isinstance(other, Size):
             return Size(self.w + other.w, self.w + other.h)
+        elif isinstance(other, Pos):
+            return Size(self.w + other.x, self.h + other.y)
         else:
             return NotImplemented
 
-     def __sub__(self, other) -> Size:
+    def __sub__(self, other) -> 'Self':
         if isinstance(other, Size):
             return Size(self.w - other.w, self.h - other.h)
+        elif isinstance(other, Pos):
+            return Size(self.w - other.x, self.h - other.y)
+        else:
+            return NotImplemented
+
+    def __mul__(self, other) -> 'Self':
+        if isinstance(other, int):
+            return Size(self.w * other, self.h * other)
         else:
             return NotImplemented
 

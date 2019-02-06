@@ -46,7 +46,7 @@ def main():
 
         if move is not None:
             dx, dy = move
-            player.body.pos.add_xy(dx, dy)
+            player.body.pos.add(dx, dy)
 
         if exit is not None:
             return True
