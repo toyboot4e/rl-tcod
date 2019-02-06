@@ -8,9 +8,20 @@ class Pos(object):
     def __init__(self, x: int, y: int):
         self.x, self.y = x, y
 
-    def add_xy(self, x: int, y: int):
-        self.x += x
-        self.y += y
+    def __str__(self):
+        return format('Pos({0}, {1})', self.w, self.h)
+
+    def __add__(self, other):
+        if isinstance(other, Pos):
+            return Size(self.x + other.x, self.y + other.y)
+        else:
+            return NotImplemented
+
+     def __sub__(self, other) -> Size:
+        if isinstance(other, Pos):
+            return Size(self.x - other.x, self.y - other.y)
+        else:
+            return NotImplemented
 
 class Size(object):
     """
@@ -23,15 +34,62 @@ class Size(object):
     def area(self) -> int:
         return self.w * self.h
 
+    def __str__(self):
+        return format('Size({0}, {1})', self.w, self.h)
+
+    def __add__(self, other):
+        if isinstance(other, Size):
+            return Size(self.w + other.w, self.w + other.h)
+        else:
+            return NotImplemented
+
+     def __sub__(self, other) -> Size:
+        if isinstance(other, Size):
+            return Size(self.w - other.w, self.h - other.h)
+        else:
+            return NotImplemented
+
 class Rect(object):
     """
-    A 2D rectangle.
+    A 2D rectangle made with left up positon and size.
     """
 
     def __init__(self, x, y, w, h):
         self.pos: Pos = Pos(w, h)
         self.size: Size = Size(w, h)
 
+    def __str__(self):
+        return format('Rect({0}, {1}, {2}, {3})', self.x, self.y, self.w, self.h)
+
+    def area(self) -> int:
+        return self.size.area()
+
+    def offset(self, pos: Pos) -> 'Self':
+        return Rect(self.pos.x + pos.x, self.pos.y + pos.y, self.size.w, self.size.h)
+
     @staticmethod
-    def from_vec(pos: Pos, size: Size) -> 'Self':
+    def from_vecs(pos: Pos, size: Size) -> 'Self':
         return Rect(pos.x, pos.y, size.w, size.h)
+
+    @staticmethod
+    def from_points(self, x1, y1, x2, y2) -> 'Self':
+        return Rect(x1, y1, x2 - x1 + 1, y2 - y1 + 1)
+
+    @staticmethod
+    def from_point_vecs(self, left_up: Pos, right_down: Pos) -> 'Self':
+        return Rect(left_up.x, left_up.y, right_down.x - left_up.x + 1, right_down.y - left_up + 1)
+
+    def left_up(self) -> Pos:
+        return self.pos
+
+    def left_down(self) -> Pos:
+        return Pos(self.pos.x, self.pos.y + self.size.h - 1)
+
+    def right_up(self) -> Pos:
+        return Pos(self.pos.x + self.size.w - 1, self.pos.y)
+
+    def right_down(self) -> Pos:
+        return Pos(self.pos.x + self.size.w - 1, self.pos.y + self.size.h - 1)
+
+    def center(self) -> Pos:
+        return Pos(self.pos.x + self.size.w // 2, self.pos.y + self.size.h // 2)
