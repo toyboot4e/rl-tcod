@@ -12,7 +12,7 @@ class Pos(object):
         return Pos(self.x + x, self.y + y)
 
     def __str__(self):
-        return format('Pos({0}, {1})', self.w, self.h)
+        return format('Pos({0}, {1})', self.x, self.y)
 
     def __add__(self, other):
         if isinstance(other, Pos):
@@ -82,7 +82,7 @@ class Rect(object):
         self.size: Size = Size(w, h)
 
     def __str__(self):
-        return format('Rect({0}, {1}, {2}, {3})', self.x, self.y, self.w, self.h)
+        return format('Rect({0}, {1}, {2}, {3})', self.pos.x, self.pos.y, self.size.w, self.size.h)
 
     def area(self) -> int:
         return self.size.area()
@@ -116,3 +116,19 @@ class Rect(object):
 
     def center(self) -> Pos:
         return Pos(self.pos.x + self.size.w // 2, self.pos.y + self.size.h // 2)
+
+    def left(self) -> int:
+        return self.pos.x
+
+    def right(self) -> int:
+        return self.pos.x + self.size.w - 1
+
+    def top(self) -> int:
+        return self.pos.y
+
+    def bottom(self) -> int:
+        return self.pos.y + self.size.h - 1
+
+    def intersects(self, other: 'Rect'):
+        return self.left() - other.right()
+
