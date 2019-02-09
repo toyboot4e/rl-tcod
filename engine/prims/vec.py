@@ -1,4 +1,4 @@
-from typing import Generator, Tuple, Any
+from typing import Generator, Any, Tuple
 
 
 class Pos(object):
@@ -11,6 +11,9 @@ class Pos(object):
 
     def add(self, x: int, y: int) -> 'Pos':
         return Pos(self.x + x, self.y + y)
+
+    def to_tuple(self) -> Tuple[int, int]:
+        return (self.x, self.y)
 
     def __str__(self):
         return format('Pos({0}, {1})', self.x, self.y)
@@ -48,6 +51,9 @@ class Size(object):
 
     def area(self) -> int:
         return self.w * self.h
+
+    def to_tuple(self) -> Tuple[int, int]:
+        return (self.w, self.h)
 
     def __str__(self):
         return format('Size({0}, {1})', self.w, self.h)
