@@ -1,7 +1,7 @@
 from typing import List, Set, Dict, Tuple, Optional
 import tcod
 from tcod.console import Console
-from engine import Entity, GameMap, Tile
+from engine import Entity, Stage, Tile
 from engine.prims import Rect
 from enum import Enum
 
@@ -13,11 +13,11 @@ class TilePallet:
 
     DARK_WALL = tcod.Color(0, 0, 100)
     DARK_GROUND = tcod.Color(50, 50, 150)
-    LIGHT_WALL: tcod.Color(130, 110, 50)
-    LIGHT_GROUND: ibtcod.Color(200, 180, 50)
+    LIGHT_WALL = tcod.Color(130, 110, 50)
+    LIGHT_GROUND = tcod.Color(200, 180, 50)
 
 
-def render_all(con: Console, map: GameMap, entities: List[Entity], scr_w: int, scr_h: int) -> None:
+def render_all(con: Console, map: Stage, entities: List[Entity], scr_w: int, scr_h: int) -> None:
     for (x, y) in ((x, y) for y in range(0, map.size.h) for x in range(0, map.size.w)):
         tile: Tile = map.tile_at(x, y)
         if tile.is_block_sight:

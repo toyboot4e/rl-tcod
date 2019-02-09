@@ -2,10 +2,10 @@ import tcod
 from typing import Tuple
 import engine
 from engine import contents, comps, input_handler
-from engine import Entity, EntityFactory, GameMap, Tile
+from engine import Entity, EntityFactory, Stage, Tile
 from engine.prims import Pos
 from engine.dungen import DunGen
-from ui import render_all, clear_all
+from ui import render_fns, fov_fns
 
 
 def main():
@@ -18,23 +18,25 @@ def main():
     tcod.console_init_root(SCR_W, SCR_H, title=WIN_TITLE, fullscreen=False)
 
     con = tcod.console_new(SCR_W, SCR_H)
-    map = GameMap(MAP_W, MAP_H)
+    stage = Stage(MAP_W, MAP_H)
 
     player: Entity = EntityFactory().actor().art(
         '@', [255, 255, 255]).pos(20, 20).build()
-    npc = EntityFactory().actor().art('N', [255, 255, 255]).pos(10, 10).build()
+    npc: Entity = EntityFactory().actor().art(
+        'N', [255, 255, 255]).pos(10, 10).build()
 
     entities = [player, npc]
 
-    DunGen(map).create(9, 2, 7).place_rand(player, npc)
+    DunGen(stage).create(9, 2, 7).place_rand(player, npc)
+    fov = fov_fns.init_fov(stage)
 
     key, mouse = tcod.Key(), tcod.Mouse()
     while not tcod.console_is_window_closed():
         tcod.sys_check_for_event(tcod.EVENT_KEY_PRESS, key, mouse)
 
-        render_all(con, map, entities, SCR_W, SCR_H)
+        render_fns.render_all(con, stage, entities, SCR_W, SCR_H)
         tcod.console_flush()
-        clear_all(con, entities)
+        render_fns.clear_all(con, entities)
 
         cmd = input_handler.handle_keys(key)
 

@@ -2,14 +2,14 @@ from typing import List
 from random import randint
 from .dungeon import Dungeon
 from engine.prims import Size, Pos, Rect
-from engine.map import GameMap, Tile
+from engine.stage import Stage, Tile
 from engine import Entity
 
 
 class DunGen:
 
-    def __init__(self, game_map: GameMap):
-        self.game_map = game_map
+    def __init__(self, stage: Stage):
+        self.stage = stage
         self.rooms: List[Rect] = []
 
     def place_rand(self, *entities: Entity) -> 'DunGen':
@@ -20,7 +20,7 @@ class DunGen:
         return self
 
     def create(self, n_max_rooms: int, room_min_size: int, room_max_size: int) -> 'DunGen':
-        map_width, map_height = self.game_map.size.to_tuple()
+        map_width, map_height = self.stage.size.to_tuple()
         for _ in range(0, n_max_rooms):
             w: int = randint(room_min_size, room_max_size)
             h: int = randint(room_min_size, room_max_size)
@@ -30,13 +30,10 @@ class DunGen:
             new_room = Rect(x, y, w, h)
             if len(self.rooms) == 0:
                 self.rooms.append(new_room)
-                print(new_room)
                 continue
 
             if any(new_room.intersects(other) for other in self.rooms):
                 continue
-
-            print(new_room)
 
             prev = self.rooms[-1].center()
             new = new_room.center()
@@ -56,15 +53,15 @@ class DunGen:
 
     def _create_h_tunnel(self, left: int, right: int, y: int) -> None:
         for x in range(min(left, right), max(left, right) + 1):
-            tile = self.game_map.tile_at(x, y)
+            tile = self.stage.tile_at(x, y)
             tile.set_params(False, is_block_sight=False, is_block_diag=False)
 
     def _create_v_tunnel(self, top: int, bottom: int, x: int) -> None:
         for y in range(min(top, bottom), max(top, bottom)):
-            tile = self.game_map.tile_at(x, y)
+            tile = self.stage.tile_at(x, y)
             tile.set_params(False, is_block_sight=False, is_block_diag=False)
 
     def _create_room(self, rect: Rect) -> None:
         for (x, y) in rect.each_cells():
-            tile = self.game_map.tile_at(x, y)
+            tile = self.stage.tile_at(x, y)
             tile.set_params(False, is_block_sight=False, is_block_diag=False)

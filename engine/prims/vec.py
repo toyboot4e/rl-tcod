@@ -55,6 +55,9 @@ class Size(object):
     def to_tuple(self) -> Tuple[int, int]:
         return (self.w, self.h)
 
+    def to_range(self) -> Generator[Tuple[int, int], None, None]:
+        return ((x, y) for y in range(0, self.h) for x in range(0, self.w))
+
     def __str__(self):
         return format('Size({0}, {1})', self.w, self.h)
 
