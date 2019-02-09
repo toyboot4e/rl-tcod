@@ -1,9 +1,10 @@
 import tcod
+from typing import Tuple
 import engine
 from engine import contents, comps, input_handler
 from engine import Entity, EntityFactory, GameMap, Tile
+from engine.dungen import DunGen
 from ui import render_all, clear_all
-from typing import Tuple
 
 
 def main():
@@ -17,6 +18,7 @@ def main():
 
     con = tcod.console_new(SCR_W, SCR_H)
     map = GameMap(MAP_W, MAP_H)
+    DunGen(map).create(9, 2, 8)
 
     player = EntityFactory().actor().art(
         '@', [255, 255, 255]).pos(20, 20).build()
