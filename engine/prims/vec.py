@@ -3,20 +3,20 @@ from typing import Generator, Any, Tuple
 
 class Pos(object):
     """
-    A 2D integer vector that represents a grid position.
+    A 2D immutable integer vector that represents a grid position.
     """
 
     def __init__(self, x: int, y: int) -> None:
         self.x, self.y = x, y
 
-    def add(self, x: int, y: int) -> 'Pos':
-        return Pos(self.x + x, self.y + y)
-
     def to_tuple(self) -> Tuple[int, int]:
         return (self.x, self.y)
 
+    def add(self, x: int, y: int) -> 'Pos':
+        return Pos(self.x + x, self.y + y)
+
     def __str__(self):
-        return format('Pos({0}, {1})', self.x, self.y)
+        return 'Pos({0}, {1})'.format(self.x, self.y)
 
     def __add__(self, other: Any) -> 'Pos':
         if isinstance(other, Pos):
@@ -43,7 +43,7 @@ class Pos(object):
 
 class Size(object):
     """
-    A 2D integer vector that represents a size.
+    A 2D immutable integer vector that represents a size.
     """
 
     def __init__(self, w: int, h: int) -> None:
@@ -83,15 +83,15 @@ class Size(object):
 
 class Rect(object):
     """
-    A 2D rectangle made with left up positon and size.
+    A 2D immutable rectangle made with left up positon and size.
     """
 
     def __init__(self, x: int, y: int, w: int, h: int) -> None:
-        self.pos: Pos = Pos(w, h)
+        self.pos: Pos = Pos(x, y)
         self.size: Size = Size(w, h)
 
     def __str__(self) -> str:
-        return 'Rect({1}, {2}, {3}, {4})'.format(self.pos.x, self.pos.y, self.size.w, self.size.h)
+        return 'Rect({}, {}, {}, {})'.format(self.pos.x, self.pos.y, self.size.w, self.size.h)
 
     def area(self) -> int:
         return self.size.area()
@@ -141,7 +141,7 @@ class Rect(object):
 
     def intersects(self, other: 'Rect') -> bool:
         return not (self.right() < other.left() or self.left() > other.right()) and \
-            not (self.bottom() < other.top() or self.top() > other.top())
+            not (self.bottom() < other.top() or self.top() > other.bottom())
 
     def each_cells(self) -> Generator[Tuple[int, int], None, None]:
         return ((x, y) for y in range(self.top(), self.bottom() + 1) for x in range(self.left(), self.right() + 1))

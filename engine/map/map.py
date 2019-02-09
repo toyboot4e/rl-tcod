@@ -10,16 +10,14 @@ class GameMap(object):
 
     def __init__(self, w: int, h: int) -> None:
         self.size: Size = Size(w, h)
-        self.tiles: List[Tile] = self.initialize_tiles()
+        self.tiles: List[Tile] = [Tile(True, True, True)
+                                  for _ in range(0, self.size.area())]
 
     def index(self, x: int, y: int) -> int:
         return x + y * self.size.w
 
     def tile_at(self, x: int, y: int) -> Tile:
         return self.tiles[self.index(x, y)]
-
-    def initialize_tiles(self) -> List[Tile]:
-        return [Tile(True, True, True) for _ in range(0, self.size.area())]
 
     # def print_all(self):
         # TODO: use
