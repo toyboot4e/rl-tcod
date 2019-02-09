@@ -28,13 +28,19 @@ def main():
     entities = [player, npc]
 
     DunGen(stage).create(9, 2, 7).place_rand(player, npc)
-    fov = fov_fns.init_fov(stage)
+    fov_map = fov_fns.init_fov(stage)
+    fov_r = 6
+    fov_fns.refresh_fov(fov_map, player.body.pos.x,
+                        player.body.pos.y, fov_r, True, 0)
 
     key, mouse = tcod.Key(), tcod.Mouse()
     while not tcod.console_is_window_closed():
         tcod.sys_check_for_event(tcod.EVENT_KEY_PRESS, key, mouse)
 
-        render_fns.render_all(con, stage, entities, SCR_W, SCR_H)
+        fov_fns.refresh_fov(fov_map, player.body.pos.x,
+                            player.body.pos.y, fov_r, True, 0)
+
+        render_fns.render_all(con, stage, fov_map, entities, SCR_W, SCR_H)
         tcod.console_flush()
         render_fns.clear_all(con, entities)
 
@@ -43,7 +49,9 @@ def main():
         move = cmd.get('move')
         if move is not None:
             dx, dy = move
-            player.body.set_pos(player.body.pos.add(dx, dy))
+            next = player.body.pos.add(dx, dy)
+            if not stage.tile_at(next.x, next.y).is_block:
+                player.body.set_pos(player.body.pos.add(dx, dy))
 
         exit = cmd.get('exit')
         if exit is not None:

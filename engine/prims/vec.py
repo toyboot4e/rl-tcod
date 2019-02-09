@@ -146,5 +146,5 @@ class Rect(object):
         return not (self.right() < other.left() or self.left() > other.right()) and \
             not (self.bottom() < other.top() or self.top() > other.bottom())
 
-    def each_cells(self) -> Generator[Tuple[int, int], None, None]:
+    def to_range(self) -> Generator[Tuple[int, int], None, None]:
         return ((x, y) for y in range(self.top(), self.bottom() + 1) for x in range(self.left(), self.right() + 1))
