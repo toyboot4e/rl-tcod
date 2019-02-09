@@ -1,5 +1,6 @@
 import tcod
 
+
 def handle_keys(key):
     # Movement keys TODO: allow hjkl
     if key.vk == tcod.KEY_UP:
