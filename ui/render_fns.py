@@ -17,24 +17,30 @@ class TilePallet:
     LIGHT_GROUND = tcod.Color(200, 180, 50)
 
 
-def render_all(con: Console, map: Stage, entities: List[Entity], scr_w: int, scr_h: int) -> None:
-    for (x, y) in ((x, y) for y in range(0, map.size.h) for x in range(0, map.size.w)):
-        tile: Tile = map.tile_at(x, y)
-        if tile.is_block_sight:
-            # print('block at {}, {}'.format(x, y))
-            tcod.console_set_char_background(
-                con, x, y, TilePallet.DARK_WALL, tcod.BKGND_SET)
+def render_all(con: Console, stage: Stage, fov_map: tcod.map.Map, entities: List[Entity], scr_w: int, scr_h: int) -> None:
+    for (x, y) in stage.size.to_range():
+        tile = stage.tile_at(x, y)
+
+        color: tcod.Color
+        if tcod.map_is_in_fov(fov_map, x, y):
+            color = TilePallet.LIGHT_WALL if tile.is_block_sight else TilePallet.LIGHT_GROUND
+            tile.set_is_explored(True)
+        elif tile.is_explored:
+            color = TilePallet.DARK_WALL if tile.is_block_sight else TilePallet.DARK_GROUND
         else:
-            tcod.console_set_char_background(
-                con, x, y, TilePallet.DARK_GROUND, tcod.BKGND_SET)
+            continue
+
+        tcod.console_set_char_background(con, x, y, color, tcod.BKGND_SET)
 
     for entity in entities:
-        draw_entity(con, entity)
+        draw_entity(con, entity, fov_map)
 
     tcod.console_blit(con, 0, 0, scr_w, scr_h, 0, 0, 0)
 
 
-def draw_entity(con: Console, entity: Entity) -> None:
+def draw_entity(con: Console, entity: Entity, fov_map: tcod.map.Map) -> None:
+    if not tcod.map_is_in_fov(fov_map, entity.body.pos.x, entity.body.pos.y):
+        return
     tcod.console_set_default_foreground(con, entity.art.color)
     tcod.console_put_char(con, entity.body.pos.x,
                           entity.body.pos.y, entity.art.char, tcod.BKGND_NONE)
@@ -46,6 +52,5 @@ def clear_all(con: Console, entities: List[Entity]) -> None:
 
 
 def clear_entity(con: Console, entity: Entity) -> None:
-    # erase the character that represents this object
     tcod.console_put_char(con, entity.body.pos.x,
                           entity.body.pos.y, ' ', tcod.BKGND_NONE)

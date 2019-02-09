@@ -62,6 +62,6 @@ class DunGen:
             tile.set_params(False, is_block_sight=False, is_block_diag=False)
 
     def _create_room(self, rect: Rect) -> None:
-        for (x, y) in rect.each_cells():
+        for (x, y) in rect.to_range():
             tile = self.stage.tile_at(x, y)
             tile.set_params(False, is_block_sight=False, is_block_diag=False)
