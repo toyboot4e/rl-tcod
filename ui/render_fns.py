@@ -7,8 +7,7 @@ from enum import Enum
 
 
 class TilePallet:
-    """
-    It holds ascii pallets of tiles.
+    """It holds ascii pallets of tiles.
     """
 
     DARK_WALL = tcod.Color(0, 0, 100)
@@ -18,15 +17,15 @@ class TilePallet:
 
 
 def render_all(con: Console, stage: Stage, fov_map: tcod.map.Map, entities: List[Entity], scr_w: int, scr_h: int) -> None:
-    for (x, y) in stage.size.to_range():
+    for (x, y) in stage.size.each():
         tile = stage.tile_at(x, y)
 
         color: tcod.Color
         if tcod.map_is_in_fov(fov_map, x, y):
-            color = TilePallet.LIGHT_WALL if tile.is_block_sight else TilePallet.LIGHT_GROUND
+            color = TilePallet.LIGHT_WALL if tile.is_blocked_sight else TilePallet.LIGHT_GROUND
             tile.set_is_explored(True)
         elif tile.is_explored:
-            color = TilePallet.DARK_WALL if tile.is_block_sight else TilePallet.DARK_GROUND
+            color = TilePallet.DARK_WALL if tile.is_blocked_sight else TilePallet.DARK_GROUND
         else:
             continue
 

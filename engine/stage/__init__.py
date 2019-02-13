@@ -1,2 +1,3 @@
-from .stage import Stage
+from .block import Block
 from .tile import Tile
+from .stage import Stage

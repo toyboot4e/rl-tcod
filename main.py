@@ -22,12 +22,10 @@ def main():
 
     player: Entity = EntityFactory().actor().art(
         '@', [255, 255, 255]).pos(20, 20).build()
-    npc: Entity = EntityFactory().actor().art(
-        'N', [255, 255, 255]).pos(10, 10).build()
+    entities = [player]
 
-    entities = [player, npc]
-
-    DunGen(stage).create(9, 2, 7).place_rand(player, npc)
+    DunGen(stage).create(9, 2, 7).place_rand(
+        player).create_monsters(entities, 4)
     fov_map = fov_fns.init_fov(stage)
     fov_r = 6
     fov_fns.refresh_fov(fov_map, player.body.pos.x,
@@ -49,9 +47,9 @@ def main():
         move = cmd.get('move')
         if move is not None:
             dx, dy = move
-            next = player.body.pos.add(dx, dy)
-            if not stage.tile_at(next.x, next.y).is_block:
-                player.body.set_pos(player.body.pos.add(dx, dy))
+            next = player.body.pos.offset(Pos(dx, dy))
+            if not stage.tile_at(next.x, next.y).is_blocked:
+                player.body.set_offset(Pos(dx, dy))
 
         exit = cmd.get('exit')
         if exit is not None:
