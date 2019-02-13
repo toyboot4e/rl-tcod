@@ -5,7 +5,7 @@ from typing import List
 
 
 class EntityFactory(object):
-    """ A helper for making entities.
+    """Helper for making entities.
     """
 
     def __init__(self) -> None:

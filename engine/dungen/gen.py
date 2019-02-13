@@ -1,12 +1,14 @@
 from typing import List
 from random import randint
-from .dungeon import Dungeon
+import tcod
 from engine.prims import Size, Pos, Rect
 from engine.stage import Stage, Tile
-from engine import Entity
+from engine import Entity, EntityFactory
 
 
 class DunGen:
+    """Dungeon gnenerator.
+    """
 
     def __init__(self, stage: Stage):
         self.stage = stage
@@ -54,14 +56,44 @@ class DunGen:
     def _create_h_tunnel(self, left: int, right: int, y: int) -> None:
         for x in range(min(left, right), max(left, right) + 1):
             tile = self.stage.tile_at(x, y)
-            tile.set_params(False, is_block_sight=False, is_block_diag=False)
+            tile.set_block(False, is_blocked_sight=False,
+                           is_blocked_diag=False)
 
     def _create_v_tunnel(self, top: int, bottom: int, x: int) -> None:
         for y in range(min(top, bottom), max(top, bottom)):
             tile = self.stage.tile_at(x, y)
-            tile.set_params(False, is_block_sight=False, is_block_diag=False)
+            tile.set_block(False, is_blocked_sight=False,
+                           is_blocked_diag=False)
 
     def _create_room(self, rect: Rect) -> None:
-        for (x, y) in rect.to_range():
+        for (x, y) in rect.each():
             tile = self.stage.tile_at(x, y)
-            tile.set_params(False, is_block_sight=False, is_block_diag=False)
+            tile.set_block(False, is_blocked_sight=False,
+                           is_blocked_diag=False)
+
+    def create_monsters(self, entities: List[Entity], max_per_room: int) -> 'DunGen':
+        for r in self.rooms:
+            self._create_monsters_in_room(r, entities, max_per_room)
+        return self
+
+    def _create_monsters_in_room(self, rect: Rect, entities: List[Entity], max_per_room: int) -> 'DunGen':
+        # Get a random number of monsters
+        number_of_monsters = randint(0, max_per_room)
+
+        for _ in range(number_of_monsters):
+            # Choose a random location in the room
+            x = randint(rect.left(), rect.right())
+            y = randint(rect.top(), rect.bottom())
+            pos = Pos(x, y)
+
+            monster: Entity
+            if not any(e for e in entities if e.body.pos == pos):
+                if randint(0, 100) < 80:
+                    monster = EntityFactory().pos(x, y).art(
+                        'o', tcod.desaturated_green).build()
+                else:
+                    monster = EntityFactory().pos(x, y).art('o', tcod.darker_green).build()
+
+                entities.append(monster)
+
+        return self

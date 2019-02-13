@@ -1,6 +1,6 @@
-from engine.prims import Size
-from .tile import Tile
 from typing import List
+from engine.prims import Size
+from engine.stage import Tile, Block
 
 
 class Stage(object):
@@ -10,7 +10,7 @@ class Stage(object):
 
     def __init__(self, w: int, h: int) -> None:
         self.size: Size = Size(w, h)
-        self.tiles: List[Tile] = [Tile(True, True, True)
+        self.tiles: List[Tile] = [Tile(Block(True, True, True), False)
                                   for _ in range(0, self.size.area())]
 
     def index(self, x: int, y: int) -> int:

@@ -1,6 +1,6 @@
 from engine.prims import Pos
 
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     from engine.comps import Actor, Body, Art
 
