@@ -20,8 +20,8 @@ class Body(object):
         self.pos = self.pos + offset
 
     @property
-    def is_blocked(self):
-        return self.block.is_blocked
+    def is_blocked(self) -> bool:
+        return self.block.tile
 
-    def is_blocked_sight(self):
-        return self.block.is_sight_blocked
+    def is_blocked_sight(self) -> bool:
+        return self.block.sight

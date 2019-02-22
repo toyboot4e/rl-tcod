@@ -1,4 +1,6 @@
 from enum import Enum
+from typing import cast
+
 
 class EDir(Enum):
     """
@@ -9,14 +11,17 @@ class EDir(Enum):
     N = 8
     NE = 7
     E = 6
-    G = 5 # G: Ground
+    G = 5  # G: Ground
     W = 4
     SE = 3
     S = 2
     SW = 1
 
-    def x(self):
-        return (self.value - 1) % 3
+    def as_int(self) -> int:
+        return cast(int, self.value)
 
-    def y(self):
-        return (self.value - 4) / 3 * -1
+    def x(self) -> int:
+        return (self.as_int() - 1) % 3
+
+    def y(self) -> int:
+        return (self.as_int() - 4) // -3

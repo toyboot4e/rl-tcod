@@ -1,7 +1,8 @@
 import tcod
+from typing import Mapping
 
 
-def handle_keys(key):
+def handle_keys(key: tcod.Key):
     # Movement keys TODO: allow hjkl
     if key.vk == tcod.KEY_UP:
         return {'move': (0, -1)}

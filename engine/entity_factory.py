@@ -1,15 +1,19 @@
 from engine.prims import Pos
 from engine import Entity
 from engine.comps import Body, Actor, Art
-from typing import List
+from typing import List, Optional
 
 
 class EntityFactory(object):
     """Helper for making entities.
     """
 
-    def __init__(self) -> None:
-        self.entity = Entity()
+    def __init__(self, entity: Optional[Entity] = None) -> None:
+        if entity is None:
+            self.entity: Entity = Entity()
+        else:
+            self.entity: Entity = entity
+
         self.entity.body = Body(self.entity, Pos(0, 0))
 
     def build(self) -> Entity:

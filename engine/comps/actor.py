@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING
-from engine import Entity
+from typing import Iterable
+from engine import Entity, Action
+
 
 class Actor(object):
     """
@@ -9,3 +10,5 @@ class Actor(object):
     def __init__(self, entity: Entity):
         self.entity: Entity = entity
 
+    def take_turn(self) -> Iterable[Action]:
+        pass
