@@ -16,6 +16,7 @@ class TilePallet:
     LIGHT_GROUND = tcod.Color(200, 180, 50)
 
 
+# errors if any entity doesn't have Body
 def render_all(con: Console, stage: Stage, fov_map: tcod.map.Map, entities: List[Entity], scr_w: int, scr_h: int) -> None:
     for (x, y) in stage.size.each():
         tile = stage.tile_at(x, y)

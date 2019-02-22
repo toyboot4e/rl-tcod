@@ -13,12 +13,13 @@ class RoguelikeScene(Scene):
 
     def __init__(self, scr_w: int, scr_h: int) -> None:
         self.console = tcod.console_new(scr_w, scr_h)
-        self.stage = Stage(scr_w, scr_h)
+        self.stage: Stage = Stage(scr_w, scr_h)
         self.entities: List[Entity] = []
-        self.player = Entity()
+        self.player: Entity = Entity()
         self.entities.append(self.player)
+        self._construct()
 
-    def construct(self) -> None:
+    def _construct(self) -> None:
         EntityFactory(self.player).actor().art(
             '@', [255, 255, 255]).pos(20, 20).build()
 
@@ -28,16 +29,16 @@ class RoguelikeScene(Scene):
         self.fov_map = fov_fns.init_fov(self.stage)
 
     def render(self) -> None:
-        tcod.console_flush()
-        # map and entities
-        render_fns.clear_all(self.console, self.entities)
-        # fov
-        self.update_fov()
         scr_w, scr_h = tcod.sys_get_current_resolution()
+
+        self._update_fov()
         render_fns.render_all(self.console, self.stage,
                               self.fov_map, self.entities, scr_w, scr_h)
 
-    def update_fov(self) -> None:
+        tcod.console_flush()
+        render_fns.clear_all(self.console, self.entities)
+
+    def _update_fov(self) -> None:
         fov_r = 6
         fov_fns.refresh_fov(self.fov_map, self.player.body.pos.x,
                             self.player.body.pos.y, fov_r, True, 0)
