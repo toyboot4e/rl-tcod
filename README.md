@@ -1,3 +1,5 @@
+> Archived: I found it's not as good as I expected to do static typing in Python.
+
 # rl-tcod
 Yet another hobby project to follow [the revised tutorial](http://rogueliketutorials.com/). Main differences from the original code base are:  
 
@@ -12,4 +14,3 @@ For object orientation, I followed the [Hauberk](https://github.com/munificent/h
 - [pythontcod](https://github.com/libtcod/python-tcod) 
 
 Just run `pip install tcod` to get pythontcod installed on your computer.
-
